@@ -1,69 +1,44 @@
-name: maintenance
-
-on: 
+on:
   workflow_dispatch:
     inputs:
-      env:
-        description: "Choose Environment [dev|ci|demo]"
-        default: "dev"
-        required: true 
-      repository:
-        description: "Enter Service Name to deploy"
-        default: "null"
+      environment:
+        description: "enter the environment to deploy to"
+        required: true
+      version_identity:
+        description: "Identity: enter image tag"
         required: false
-      version:
-        description: "Enter the container tag to deploy"
-        default: "null"
+      version_marketdata:
+        description: "MarketData: enter image tag"
         required: false
-      nodecount:
-        description: "Node Count [1|2|3|4]"
+      version_core:
+        description: "Pricing/Core: enter image tag"
         required: false
-      vmsize:
-        description: "VM Size [Standard_DS2_v2]"
-        default: "null"
+      version_websocket:
+        description: "Websocket: enter image tag"
         required: false
-      apply:
-        description: "Destroy: enter DESTROY to terraform destroy"
-        default: "null"
+     version_ihs:
+        description: "iHS: enter image tag"
+        required: false
+      version_igm:
+        description: "iGM: enter image tag"
+        required: false
+      version_portal:
+        description: "Portal: enter image tag"
         required: false
 
 jobs:
-  destroy:
-    if: github.event.inputs.apply  == 'DESTROY'  
+  identity:
+    if: github.event.inputs.version_identity  != ''  
     runs-on: ubuntu-latest
     steps:
-      - name: Check if Repository Flagged for DESTROY
-        if: github.event.inputs.repository != ''
-        run: echo DESTROY container ${{ github.event.inputs.repository }}
-
-  apply:
-    if: github.event.inputs.apply == 'APPLY' 
-    runs-on: ubuntu-latest
-    steps:
-      - name: apply repo
-        run: echo ${{ github.event.inputs.apply }} ${{ github.event.inputs.repository }} 
-
-  deploy-container:
-    if: github.event.inputs.repository != 'null'
-    runs-on: ubuntu-latest
-    steps:
-      - name: container-name
-        run: echo Container Image  ${{ github.event.inputs.repository }}
-      - name: container-version
-        if: github.events.inputs.version != 'null'
-        run: echo Deploy or Re-Deploy ${{ github.event.inputs.repository }}:${{ github.event.inputs.version }} 
-
-  NodeCount:
-    if: github.event.inputs.nodecount != 'null'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Change Node Count in AKS CLuster
-        if: github.event.inputs.nodecount > 1
-        run: echo Nodecount ${{ github.events.inputs.version }}
-
-  compute:
-    if: github.event.inputs.vmsize != 'null'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Change Node VM SKU
-        run: echo VMSKU ${{ github.event.input.vmsize }}
+      - uses: convictional/trigger-workflow-and-wait@v1.3.0
+        with:
+          owner: bondorigination
+          repo: devops
+          github_token: ${{ secrets.PAT }}
+          workflow_file_name: test.yml
+          wait_interval: 10
+          inputs: '{"environment": "dev", "version": "123"}'
+          propagate_failure: false
+          trigger_workflow: true
+          wait_workflow: true
