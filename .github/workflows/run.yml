@@ -25,7 +25,7 @@ jobs:
           github_token: ${{ secrets.PAT }}
           workflow_file_name: test.yml
           wait_interval: 10
-          inputs: '{"environment": "dev", "version_identity": "123"}'
+          inputs: '{"environment": "${{ github.event.inputs.environment }}", "version_identity": "${{ github.event.inputs.version_identity }}"}'
           propagate_failure: false
           trigger_workflow: true
           wait_workflow: true
