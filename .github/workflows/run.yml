@@ -7,24 +7,7 @@ on:
       version_identity:
         description: "Identity: enter image tag"
         required: false
-      version_marketdata:
-        description: "MarketData: enter image tag"
-        required: false
-      version_core:
-        description: "Pricing/Core: enter image tag"
-        required: false
-      version_websocket:
-        description: "Websocket: enter image tag"
-        required: false
-      version_ihs:
-        description: "iHS: enter image tag"
-        required: false
-      version_igm:
-        description: "iGM: enter image tag"
-        required: false
-      version_portal:
-        description: "Portal: enter image tag"
-        required: false
+
 
 jobs:
   identity:
