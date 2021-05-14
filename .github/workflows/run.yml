@@ -1,19 +1,19 @@
-name: test
+name: Deploy Multiple Container [All Environments]
 
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: "enter the environment to deploy to"
+        description: "enter the environment to deploy to [devel|uat|pilot]"
         required: true
       version_identity:
         description: "Identity: enter image tag"
         required: false
       version_marketdata:
-        description: "Identity: enter image tag"
+        description: "MarketData: enter image tag"
         required: false     
 jobs:
-  build:
+  identity:
     if: github.event.inputs.version_identity  != ''  
     name: Running Identity in ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
@@ -23,9 +23,25 @@ jobs:
           owner: bondorigination
           repo: devops
           github_token: ${{ secrets.PAT }}
-          workflow_file_name: test.yml
+          workflow_file_name: k8s.yml
           wait_interval: 10
-          inputs: '{"environment": "${{ github.event.inputs.environment }}", "version_identity": "${{ github.event.inputs.version_identity }}"}'
+          inputs: '{"environment__name": "${{ github.event.inputs.environment }}", "environment__cluster": "aks05", "version": "${{ github.event.inputs.version_identity }}"}'
+          propagate_failure: false
+          trigger_workflow: true
+          wait_workflow: true
+  marketdata:
+    if: github.event.inputs.version_marketdata  != ''  
+    name: Running MarketData in ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: convictional/trigger-workflow-and-wait@v1.3.0
+        with:
+          owner: bondorigination
+          repo: devops
+          github_token: ${{ secrets.PAT }}
+          workflow_file_name: k8s.yml
+          wait_interval: 10
+          inputs: '{"environment__name": "${{ github.event.inputs.environment }}",  "environment__cluster": "aks05", "version": "${{ github.event.inputs.version_marketdata }}"}'
           propagate_failure: false
           trigger_workflow: true
           wait_workflow: true
