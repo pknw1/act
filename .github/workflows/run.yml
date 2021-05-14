@@ -9,10 +9,13 @@ on:
       version_identity:
         description: "Identity: enter image tag"
         required: false
+      version_marketdata:
+        description: "Identity: enter image tag"
+        required: false     
 jobs:
   build:
     if: github.event.inputs.version_identity  != ''  
-    name: Running Identity
+    name: Running Identity in ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - uses: convictional/trigger-workflow-and-wait@v1.3.0
