@@ -1,3 +1,5 @@
+name: test
+
 on:
   workflow_dispatch:
     inputs:
@@ -7,14 +9,12 @@ on:
       version_identity:
         description: "Identity: enter image tag"
         required: false
-
-
 jobs:
-  identity:
-    if: github.event.inputs.version_identity  != ''  
+  build:
+    name: Run Web App
     runs-on: ubuntu-latest
     steps:
-      - name: test
+      - name: Build Web App
         run: |
           echo "Build Web App"
           sleep 10s
