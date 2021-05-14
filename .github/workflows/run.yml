@@ -41,7 +41,7 @@ jobs:
           github_token: ${{ secrets.PAT }}
           workflow_file_name: k8s.yml
           wait_interval: 10
-          inputs: '{"environment__name": "${{ github.event.inputs.environment }}",  "environment__cluster": "aks05", "version": "${{ github.event.inputs.version_marketdata }}"}'
+          inputs: '{"environment": "${{ github.event.inputs.environment }}",  "cluster": "aks05", "version": "${{ github.event.inputs.version_marketdata }}"}'
           propagate_failure: false
           trigger_workflow: true
           wait_workflow: true
