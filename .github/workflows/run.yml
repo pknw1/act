@@ -1,3 +1,5 @@
+name: test
+
 on:
   workflow_dispatch:
     inputs:
@@ -16,3 +18,14 @@ jobs:
         run: |
           echo "Build Web App"
           sleep 10s
+      - uses: convictional/trigger-workflow-and-wait@v1.3.0
+        with:
+          owner: bondorigination
+          repo: devops
+          github_token: ${{ secrets.PAT }}
+          workflow_file_name: test.yml
+          wait_interval: 10
+          inputs: '{"environment": "dev", "version": "123"}'
+          propagate_failure: false
+          trigger_workflow: true
+          wait_workflow: true
