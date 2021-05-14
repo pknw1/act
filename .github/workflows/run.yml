@@ -7,3 +7,15 @@ on:
       version_identity:
         description: "Identity: enter image tag"
         required: false
+        
+jobs:
+  test1:
+    name: test2
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: |
+          echo "Build Web App"
+          sleep 10s
+    
+    
